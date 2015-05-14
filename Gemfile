@@ -16,8 +16,6 @@ gem 'coffee-rails', '~> 4.0.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -32,9 +30,37 @@ gem 'spring',        group: :development
 # Use unicorn as the app server
 # gem 'unicorn'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+gem 'bootstrap-sass'
+gem "sidekiq"
+gem 'sidetiq'
+gem 'sidekiq-limit_fetch'
+gem 'sinatra', :require => nil
 
+gem 'jquery-ui-rails'
+gem 'rails_admin'
+gem 'newrelic_rpm'
+gem 'easy_config'
+
+group :development, :test do
+  gem 'sqlite3'
+  gem 'quiet_assets'
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'capistrano', '>= 3.2.1'
+  gem 'rvm1-capistrano3', require: false
+
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-sidekiq'
+  gem 'capistrano-passenger'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner', '>= 1.0.1'
+  gem 'simplecov', '~> 0.7.1', require: false
+  gem 'faker'
+end
