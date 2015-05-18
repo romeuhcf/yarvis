@@ -12,4 +12,5 @@ class RepoCheckWorker
     end
     repo.touch(:checked_at)
   end
+  include NonOverlappingWorker
 end
