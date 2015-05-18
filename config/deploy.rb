@@ -37,14 +37,24 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 # set :keep_releases, 5
 #
 #
-before 'deploy', 'rvm1:install:rvm'  # install/update rvm
+#
 before "rvm1:install:rvm", "app:update_rvm_key"
+before 'deploy', 'rvm1:install:rvm'  # install/update rvm
+before 'deploy', 'rvm1:install:ruby'
+before 'deploy', 'app:dependencies'
 
 namespace :app do
   task :update_rvm_key do
     on roles(:app, :web), in: :groups, limit: 3, wait: 10 do
-      #execute :gpg2, "--keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3"
       execute :curl, "-sSL https://rvm.io/mpapis.asc | gpg2 --import -"
+    end
+  end
+end
+
+namespace :app do
+  task :dependencies do
+    on roles(:app, :web), in: :groups, limit: 3, wait: 10 do
+      execute :sudo, "yum install -y mysql-devel libxml2-devel libxslt-devel nodejs"
     end
   end
 end

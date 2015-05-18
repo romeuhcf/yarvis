@@ -42,6 +42,8 @@ gem 'jquery-ui-rails'
 gem 'rails_admin'
 gem 'newrelic_rpm'
 gem 'easy_config'
+gem 'thin'
+gem 'rugged'
 
 group :development, :test do
   gem 'sqlite3'

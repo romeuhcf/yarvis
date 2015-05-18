@@ -11,6 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150518185715) do
+
+  create_table "repositories", force: true do |t|
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "last_handled_revision"
+    t.datetime "checked_at"
+    t.boolean  "enabled"
+    t.boolean  "active_check"
+  end
 
 end
