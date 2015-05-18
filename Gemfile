@@ -44,6 +44,7 @@ gem 'newrelic_rpm'
 gem 'easy_config'
 gem 'thin'
 gem 'rugged'
+gem 'rsync'
 
 group :development, :test do
   gem 'sqlite3'
@@ -57,6 +58,7 @@ group :development, :test do
   gem 'capistrano-rails'
   gem 'capistrano-sidekiq'
   gem 'capistrano-passenger'
+  gem 'capistrano-thin'
 end
 
 group :test do

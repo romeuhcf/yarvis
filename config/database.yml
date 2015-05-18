@@ -30,7 +30,7 @@ test: &test
 cucumber:
   <<: *test
 
-default: &default
+mysql: &mysql
   adapter: mysql2
   encoding: utf8
   pool: 5
@@ -38,8 +38,12 @@ default: &default
   password:
   socket: /var/run/mysqld/mysqld.sock
 
+staging:
+  <<: *sqlite
+  database: db/staging.sqlite3
+
 production:
-  <<: *default
+  <<: *mysql
   database: yarvis_production
   username: yarvis
   password: <%= ENV['YARVIS_DATABASE_PASSWORD'] %>
