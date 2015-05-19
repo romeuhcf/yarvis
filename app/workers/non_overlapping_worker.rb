@@ -7,8 +7,8 @@ module NonOverlappingWorker
 
   def perform_with_protection(*args)
     key = protection_key(*args)
-    if Sidekiq.redis{|r| r.get(key) }
-      puts "Skipping #{key} ... already running"
+    if Sidekiq.redis{|r| logger.debug("Checking protection lock #{key}");r.get(key) }
+      logger.warn "Skipping #{key} ... already running"
     else
       call_original_perform(*args)
     end
@@ -17,7 +17,7 @@ module NonOverlappingWorker
   def call_original_perform(*args)
     key = protection_key(*args)
     begin
-      puts "Running protected version of #{key}"
+      logger.debug "Running protected version of #{key}"
       Sidekiq.redis{|r| r.set(key, 1); r.expire(key, 60)}
       perform_without_protection(*args)
     ensure
