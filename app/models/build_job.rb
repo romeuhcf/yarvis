@@ -1,7 +1,12 @@
 class BuildJob < ActiveRecord::Base
   include CloneTree
   belongs_to :changeset
-  serialize :log
+  serialize :log, JSON
+  serialize :build_spec, JSON
+
+  def self.from_spec!(build_spec, changeset)
+    self.create!(changeset: changeset, build_spec: build_spec.json)
+  end
 
   def running?
     finished_at.blank?
@@ -21,6 +26,6 @@ class BuildJob < ActiveRecord::Base
   end
 
   def slug
-    'default' # TODO generate slug by matrix spec
+    'default' # TODO generate slug by build spec
   end
 end

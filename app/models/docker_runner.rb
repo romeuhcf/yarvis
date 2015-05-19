@@ -14,8 +14,9 @@ class DockerRunner
     obj
   end
 
-  def initialize(root_path)
+  def initialize(root_path, build_spec)
     @root_path = root_path
+    @build_spec = build_spec
 
     @container = Docker::Container.create({
       'Cmd' => ['bash', '-c', build_script ],
