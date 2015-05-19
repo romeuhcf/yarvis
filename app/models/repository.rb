@@ -1,5 +1,5 @@
-require 'fileutils'
 class Repository < ActiveRecord::Base
+include CommandRunner
 
   has_many :changesets, dependent: :destroy
 
@@ -16,49 +16,27 @@ class Repository < ActiveRecord::Base
     end
   end
 
-  def run_command(cmd)
-    trace('subprocess.git.ls-remote') do
-      require 'open3'
-      puts "Running command #{cmd}"
-      stdin, stdout, stderr, wait_thr = Open3.popen3(cmd)
-      stdin.close_write
-      out = stdout.readlines
-      err = stderr.readlines
-      exit_status = wait_thr.value
-      return [out, err, exit_status]
-    end
-  end
-
-  def trace(tag)
-    init = Time.now
-    yield
-    taken = Time.now - init
-    logger.info(p("Trace: %s. Taken: %0.3f s" % [tag, taken]))
-  end
-
-  def update_central_repository
-    unless central_repository_checkout?
-      central_repository_checkout!
+  def update_source_code!
+    code = SourceCode.new(provision_path)
+    if not code.nice?
+      code.checkout!
     end
 
-    central_repository_update!
+    code.pull
   end
 
-  require "rsync"
-  def repository_for_revision(revision)
-    update_central_repository
-    rsync_args = %w{ -a --delete }
-    Rsync.run(central_repository_checkout_path + '/', revision_repository_checkout_path(revision) + '/', rsync_args)
-    repo_at(revision).checkout(revision, strategy: [:force])
+  def provision_path!
+    path = provision_path
+    update_source_code!
+    return path
   end
 
-  def revision_repository_checkout_path(revision)
-    File.join(cache_dir, 'repos', "repo@#{self.id}", revision)
+  def provision_path
+    File.join(cache_dir, 'repos', "repo@#{self.id}")
   end
 
   private
-
-  def central_repository_checkout!
+  def checkout!
     valid_url = url.gsub(
       'bitbucket.org:',
       'altssh.bitbucket.org:443/'
@@ -67,8 +45,7 @@ class Repository < ActiveRecord::Base
       'ssh://git@'
     ) # XXX TODO implement real url parse and substitution when required
 
-    puts "Cloning repo: #{valid_url} at #{central_repository_checkout_path}"
-    Rugged::Repository.clone_at valid_url, central_repository_checkout_path , :credentials => credentials
+    SourceCode.clone_at valid_url, provision_path, :credentials => credentials
   end
 
   def credentials
@@ -79,33 +56,7 @@ class Repository < ActiveRecord::Base
     }) # TODO implement real url parse and credentials options
   end
 
-  def central_repository_checkout_path
-    revision_repository_checkout_path('HEAD')
-  end
-
-  def central_repository_checkout?
-    crcp = central_repository_checkout_path
-    File.exist?(crcp) && File.directory?(crcp) && repo && !repo.empty?
-  end
-
   def cache_dir
     Settings.get('cached_dir', default: '/tmp/yarvis', ttl: 1.hour, desc: 'Where to put cacheable files')
-  end
-
-  def repo
-    Rugged::Repository.new(central_repository_checkout_path)
-  end
-
-  def central_repository_update!
-    #    git fetch:
-    remote = repo.remotes['origin']
-    remote.fetch(credentials: credentials)
-
-    distant_commit = repo.branches["origin/master"].target
-    repo.references.update(repo.head, distant_commit.oid)
-  end
-
-  def repo_at(revision)
-    Rugged::Repository.new(revision_repository_checkout_path(revision))
   end
 end

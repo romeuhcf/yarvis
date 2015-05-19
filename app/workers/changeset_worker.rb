@@ -1,4 +1,4 @@
-class ChangeSetWorker
+class ChangesetWorker
   include Sidekiq::Worker
   def perform(changeset_id)
     changeset = Changeset.find(changeset_id)

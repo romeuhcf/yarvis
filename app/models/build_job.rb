@@ -1,4 +1,5 @@
 class BuildJob < ActiveRecord::Base
+  include CloneTree
   belongs_to :changeset
   serialize :log
 
@@ -11,13 +12,12 @@ class BuildJob < ActiveRecord::Base
   end
 
   def provision_path!
-    path = provision_path
-    rsync_path(changeset.provision_path!, self.provision_path)
-    path
+    clone_tree(changeset.provision_path!, provision_path)
+    provision_path
   end
 
   def provision_path
-    [changeset.provision_path, slug].join('@')
+    @_provision_path ||= [changeset.provision_path, slug].join('@')
   end
 
   def slug
