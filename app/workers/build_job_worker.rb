@@ -1,4 +1,4 @@
-class RepoBuildWorker
+class BuildJobWorker
   include Sidekiq::Worker
   def perform(build_job_id)
     build_job = BuildJob.find(build_job_id)
