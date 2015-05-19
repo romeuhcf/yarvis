@@ -7,7 +7,7 @@ class BuildSpec
     'default' # TODO
   end
 
-  def to_json
+  def json
     {}
   end
 end
