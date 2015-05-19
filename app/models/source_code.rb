@@ -4,7 +4,7 @@ class SourceCode
     @repo = Rugged::Repository.new(path)
   end
 
-  def checkout
+  def checkout(revision)
     @repo.checkout(revision, strategy: [:force])
   end
 
@@ -18,7 +18,7 @@ class SourceCode
     remote.fetch(credentials: credentials)
 
     distant_commit = @repo.branches["origin/master"].target
-    repo.references.update(@repo.head, distant_commit.oid)
+    @repo.references.update(@repo.head, distant_commit.oid)
   end
 
   def nice?

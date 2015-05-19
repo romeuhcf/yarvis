@@ -22,7 +22,7 @@ include CommandRunner
       code.checkout!
     end
 
-    code.pull
+    code.pull(credentials)
   end
 
   def provision_path!
@@ -32,6 +32,10 @@ include CommandRunner
   end
 
   def provision_path
+    File.join(base_path, 'HEAD')
+  end
+
+  def base_path
     File.join(cache_dir, 'repos', "repo@#{self.id}")
   end
 
