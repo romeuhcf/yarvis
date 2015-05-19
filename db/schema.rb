@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20150519173415) do
     t.string   "container_id"
   end
 
-  add_index "build_jobs", ["changeset_id"], name: "index_build_jobs_on_changeset_id"
+  add_index "build_jobs", ["changeset_id"], name: "index_build_jobs_on_changeset_id", using: :btree
 
   create_table "changesets", force: true do |t|
     t.integer  "repository_id"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20150519173415) do
     t.datetime "updated_at"
   end
 
-  add_index "changesets", ["repository_id"], name: "index_changesets_on_repository_id"
+  add_index "changesets", ["repository_id"], name: "index_changesets_on_repository_id", using: :btree
 
   create_table "repositories", force: true do |t|
     t.string   "url"

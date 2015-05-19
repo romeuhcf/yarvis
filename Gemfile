@@ -48,7 +48,6 @@ gem 'rsync'
 gem 'docker-api', :require => 'docker'
 
 group :development, :test do
-  gem 'sqlite3'
   gem 'quiet_assets'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
@@ -69,3 +68,4 @@ group :test do
   gem 'simplecov', '~> 0.7.1', require: false
   gem 'faker'
 end
+
