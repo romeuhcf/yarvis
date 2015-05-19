@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519172612) do
+ActiveRecord::Schema.define(version: 20150519173415) do
 
   create_table "build_jobs", force: true do |t|
     t.integer  "changeset_id"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20150519172612) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "build_spec"
+    t.string   "container_id"
   end
 
   add_index "build_jobs", ["changeset_id"], name: "index_build_jobs_on_changeset_id"
