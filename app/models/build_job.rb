@@ -3,7 +3,7 @@ class BuildJob < ActiveRecord::Base
   belongs_to :changeset
   serialize :log
   serialize :build_spec
-  validates :conatiner_id, uniqueness: true
+  validates :container_id, uniqueness: true
 
   def self.from_spec!(build_spec, changeset)
     self.create!(changeset: changeset, build_spec: build_spec.json)
