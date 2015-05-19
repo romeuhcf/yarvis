@@ -1,6 +1,8 @@
 require 'fileutils'
 class Repository < ActiveRecord::Base
 
+  has_many :changesets, dependent: :destroy
+
   scope :active_check, -> { where(active_check: true) }
   scope :enabled,      -> { where(enabled: true) }
 
@@ -54,7 +56,6 @@ class Repository < ActiveRecord::Base
     File.join(cache_dir, 'repos', "repo@#{self.id}", revision)
   end
 
-
   private
 
   def central_repository_checkout!
@@ -77,7 +78,6 @@ class Repository < ActiveRecord::Base
       privatekey: File.expand_path("~/.ssh/id_rsa")
     }) # TODO implement real url parse and credentials options
   end
-
 
   def central_repository_checkout_path
     revision_repository_checkout_path('HEAD')

@@ -11,7 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150518185715) do
+ActiveRecord::Schema.define(version: 20150519133415) do
+
+  create_table "build_jobs", force: true do |t|
+    t.integer  "changeset_id"
+    t.integer  "exit_status"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.text     "log"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "build_jobs", ["changeset_id"], name: "index_build_jobs_on_changeset_id"
+
+  create_table "changesets", force: true do |t|
+    t.integer  "repository_id"
+    t.string   "revision"
+    t.string   "commit_message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "changesets", ["repository_id"], name: "index_changesets_on_repository_id"
 
   create_table "repositories", force: true do |t|
     t.string   "url"

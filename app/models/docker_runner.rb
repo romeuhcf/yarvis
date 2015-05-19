@@ -41,8 +41,8 @@ class DockerRunner
   def build_steps
     [
       "bundle install --without development --jobs=3 --retry=3" , # --deployment
-      "bundle exec rspec spec"
-    ]
+      "bundle exec rspec spec",
+    ] # TODO get from yaml
   end
 
   def step_start_line(step)
@@ -99,5 +99,9 @@ class DockerRunner
 
   def state
     @container.json['State']
+  end
+
+  def finished_at
+    DateTime.parse state['FinishedAt'] if running?
   end
 end
