@@ -45,6 +45,7 @@ gem 'easy_config'
 gem 'thin'
 gem 'rugged'
 gem 'rsync'
+gem 'docker-api', :require => 'docker'
 
 group :development, :test do
   gem 'sqlite3'

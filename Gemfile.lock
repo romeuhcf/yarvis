@@ -85,10 +85,14 @@ GEM
     daemons (1.2.2)
     database_cleaner (1.4.1)
     diff-lcs (1.2.5)
+    docker-api (1.21.4)
+      excon (>= 0.38.0)
+      json
     easy_config (1.0.1)
       erubis
     erubis (2.7.0)
     eventmachine (1.0.7)
+    excon (0.45.3)
     execjs (2.5.2)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -279,6 +283,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   cucumber-rails
   database_cleaner (>= 1.0.1)
+  docker-api
   easy_config
   factory_girl_rails
   faker

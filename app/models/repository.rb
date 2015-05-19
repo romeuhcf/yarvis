@@ -50,6 +50,11 @@ class Repository < ActiveRecord::Base
     repo_at(revision).checkout(revision, strategy: [:force])
   end
 
+  def revision_repository_checkout_path(revision)
+    File.join(cache_dir, 'repos', "repo@#{self.id}", revision)
+  end
+
+
   private
 
   def central_repository_checkout!
@@ -98,10 +103,6 @@ class Repository < ActiveRecord::Base
 
     distant_commit = repo.branches["origin/master"].target
     repo.references.update(repo.head, distant_commit.oid)
-  end
-
-  def revision_repository_checkout_path(revision)
-    File.join(cache_dir, 'repos', "repo:#{self.id}", revision)
   end
 
   def repo_at(revision)
