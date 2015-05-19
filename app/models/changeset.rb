@@ -10,6 +10,6 @@ class Changeset < ActiveRecord::Base
   end
 
   def provision_path
-    @_provision_path ||= [repository.base_path, revision].join('@')
+    @_provision_path ||= [repository.base_path, revision].join('/')
   end
 end

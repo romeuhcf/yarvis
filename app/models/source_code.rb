@@ -8,9 +8,10 @@ class SourceCode
     @repo.checkout(revision, strategy: [:force])
   end
 
-  def self.clone_at(url, credentials)
-    puts "Cloning repo: #{url} at #{@path}"
-    Rugged::Repository.clone_at url, @path , :credentials => credentials
+  def self.clone_at(url, path, credentials)
+    logger.info "Cloning repo: #{url} at #{path}"
+    Rugged::Repository.clone_at url, path , credentials
+    self.new(path)
   end
 
   def pull(credentials)

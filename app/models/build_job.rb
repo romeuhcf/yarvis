@@ -1,8 +1,9 @@
 class BuildJob < ActiveRecord::Base
   include CloneTree
   belongs_to :changeset
-  serialize :log, JSON
-  serialize :build_spec, JSON
+  serialize :log
+  serialize :build_spec
+  validates :conatiner_id, uniqueness: true
 
   def self.from_spec!(build_spec, changeset)
     self.create!(changeset: changeset, build_spec: build_spec.json)

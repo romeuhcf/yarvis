@@ -17,9 +17,10 @@ include CommandRunner
   end
 
   def update_source_code!
-    code = SourceCode.new(provision_path)
-    if not code.nice?
-      code.clone!
+    code = SourceCode.new(provision_path) rescue nil
+
+    if not code or not code.nice?
+      code = clone_it
     end
 
     code.pull(credentials)
@@ -40,7 +41,7 @@ include CommandRunner
   end
 
   private
-  def clone!
+  def clone_it
     valid_url = url.gsub(
       'bitbucket.org:',
       'altssh.bitbucket.org:443/'
