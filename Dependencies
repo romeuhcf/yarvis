@@ -1,0 +1,2 @@
+deb: cmake libssl-dev libssh-dev 
+rpm: 
