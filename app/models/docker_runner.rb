@@ -24,6 +24,10 @@ class DockerRunner
     })
   end
 
+  def id
+    @container.id
+  end
+
   def build_script
     script_lines = []
     build_steps.each do |step|
@@ -31,7 +35,7 @@ class DockerRunner
       script_lines << step
       script_lines << step_finish_line(step)
     end
-    script_lines.join("; ")
+    script_lines.join(" && ")
   end
 
   def build_steps
