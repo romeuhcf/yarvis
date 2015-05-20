@@ -2,42 +2,45 @@ language: ruby
 
 ruby:
   - 1.9.3
-  - 2.0.0
   - 2.1.3
 
 docker:
   - centos6:
     - yum install -y openssh-devel
   - ubuntu:
-    - apt-get install -y libssh-devel
+    - apt-get install -y libssh-development
+
 env:
   - DB=postgresql
   - DB=mysql
   - CACHE=redis
   - CACHE=memcached
 
-services:
+services: # nao suportado ainda
   - mongodb
   - memcached
   - redis-server
 
-pipeline:
-  before_matrix:
-    - before: echo "before matrix"
-  matrix:
-    - prepare: bundle install --path /bundle --jobs=3 --without-development --retries=3
-    - unit: rake spec
-    - rake cucumber
-    - brakeman
-  after_matrix_success:
-    - koji_build: rake koji build
-    - promote_qa:
-      manual: true
-      script: rake koji promote qa
-  after_matrix_fail:
-    - echo 'Ouch'
-  after_matrix:
-    - echo 'Bye bye baby'
+script:
+  - prepare: 
+    - bundle install --path /bundle --jobs=3 --without-development --retries=3
+    - RAILS_ENV=test rake db:create db:migrate 
+    - redis-cli flushall
+  - rspec: rake -t  # example of labeled command
+  - rake cucumber # example of direct command
+  - security: gem install brakeman; breakeman
+
+after_success: # will run on a machine similar to the first build job without data generated from it
+  - koji_build: rake koji build
+  - promote_qa:
+    manual: true
+    script: rake koji promote qa
+
+after_fail: # will run if any of the build jobs fail
+  - echo 'Ouch'
+
+after_script: # will run after all build jobs finish regardless of the result
+  - echo 'I need to take a rest!!!'
 
 cache_dir:
   - /bundle

@@ -1,2 +1,2 @@
-deb: cmake libssl-dev libssh-dev 
+deb: cmake libssl-dev libssh-dev docker.io
 rpm: 
