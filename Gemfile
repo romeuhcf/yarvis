@@ -46,6 +46,7 @@ gem 'thin'
 gem 'rugged'
 gem 'rsync'
 gem 'docker-api', :require => 'docker'
+gem 'thor'
 
 group :development, :test do
   gem 'quiet_assets'

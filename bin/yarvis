@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+require 'thor'
+$: << 'lib'
+require 'yarvis/config'
+
+
+module Yarvis
+  class CLI < Thor
+    desc "compile SECTION [MATRIX_ITEM]", "Compile some of the build script sections"
+    def compile(section, matrix_item = nil)
+      # TODO
+    end
+
+    desc "matrix [YAML]", "Display build matrix"
+    def matrix(yaml = '.yarvis.yml') 
+      matrix = Yarvis::Config.from_yaml(yaml).matrix
+      puts "Matrix dimensions: #{matrix.dimensions}"
+      puts "Matrix cases:"
+
+      matrix.cases.each_with_index do |acase, index|
+        puts "\t[%02d] - %s" % [index + 1, acase]
+      end
+    end
+  end
+end
+Yarvis::CLI.start(ARGV)

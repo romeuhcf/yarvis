@@ -1,0 +1,44 @@
+language: ruby
+
+ruby:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.3
+
+docker:
+  - centos6:
+    - yum install -y openssh-devel
+  - ubuntu:
+    - apt-get install -y libssh-devel
+env:
+  - DB=postgresql
+  - DB=mysql
+  - CACHE=redis
+  - CACHE=memcached
+
+services:
+  - mongodb
+  - memcached
+  - redis-server
+
+pipeline:
+  before_matrix:
+    - before: echo "before matrix"
+  matrix:
+    - prepare: bundle install --path /bundle --jobs=3 --without-development --retries=3
+    - unit: rake spec
+    - rake cucumber
+    - brakeman
+  after_matrix_success:
+    - koji_build: rake koji build
+    - promote_qa:
+      manual: true
+      script: rake koji promote qa
+  after_matrix_fail:
+    - echo 'Ouch'
+  after_matrix:
+    - echo 'Bye bye baby'
+
+cache_dir:
+  - /bundle
+
