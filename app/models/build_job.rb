@@ -3,10 +3,10 @@ class BuildJob < ActiveRecord::Base
   belongs_to :changeset
   serialize :log
   serialize :build_spec
-  validates :container_id, uniqueness: true
+  validates :container_id, uniqueness: true, :allow_blank => true, :allow_nil => true
 
   def self.from_spec!(build_spec, changeset)
-    self.create!(changeset: changeset, build_spec: build_spec.json)
+    self.create!(changeset: changeset, build_spec: build_spec, slug: build_spec.slug)
   end
 
   def running?
@@ -24,9 +24,5 @@ class BuildJob < ActiveRecord::Base
 
   def provision_path
     @_provision_path ||= [changeset.provision_path, slug].join('@')
-  end
-
-  def slug
-    'default' # TODO generate slug by build spec
   end
 end

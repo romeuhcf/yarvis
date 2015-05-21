@@ -15,10 +15,10 @@ module Yarvis
     def matrix(yaml = '.yarvis.yml') 
       matrix = Yarvis::Config.from_yaml(yaml).matrix
       puts "Matrix dimensions: #{matrix.dimensions}"
-      puts "Matrix cases:"
+      puts "Matrix specs:"
 
-      matrix.cases.each_with_index do |acase, index|
-        puts "\t[%02d] - %s" % [index + 1, acase]
+      matrix.specs.each_with_index do |spec, index|
+        puts "\t[%02d] - %s" % [index + 1, spec]
       end
     end
   end

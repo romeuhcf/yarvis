@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+#
+Repository.create!(url: 'git@bitbucket.org:romeuhcf/yarvis.git', active_check: true, enabled: true)
+
