@@ -1,3 +1,4 @@
+require 'shellwords'
 module Yarvis
   class CommandSet
     attr_reader :label, :commands
@@ -17,8 +18,12 @@ module Yarvis
       @dimensions_hash.values.map(&:slug).join(" | ")
     end
 
-    def docker
-      @dimensions_hash[:docker].docker
+    def docker_image
+      docker_dim.image_tag
+    end
+
+    def docker_dim
+      @dimensions_hash[:docker]
     end
 
     def runtime
@@ -38,36 +43,46 @@ module Yarvis
     end
 
     def build_script
-      script_lines = []
+
+      script_lines = ['set -e']
       build_steps.each do |step|
         script_lines << step_start_line(step.label)
-        script_lines << step.commands
+
+        step.commands.flatten.compact.map do |cmd|
+          script_lines << ["echo " + Shellwords.escape(cmd), cmd]
+        end
         script_lines << step_finish_line(step.label)
       end
-      script_lines.flatten.join(" && ")
+      script_lines.flatten.compact.join("\n")
     end
 
     def build_steps
       [
+        CommandSet.new(:docker_prepare,[
+          docker_dim.commands
+        ]),
         CommandSet.new(:code_prepare, [
-          "cp -rf /code $HOME/code",
+          "cp -rfv #{working_directory} $HOME/code",
           "cd $HOME/code",
+          "rm -rf $HOME/code/.bundle"
         ]),
         CommandSet.new(:runtime_prepare, [
-          "export BUNDLE_PATH=$HOME/code/.bundle",
-          "export BUNDLE_DISABLE_SHARED_GEMS=1",
+          #          "export BUNDLE_PATH=$HOME/code/.bundle",
+          #          "export BUNDLE_DISABLE_SHARED_GEMS=1",
         ]),
 
         CommandSet.new(:env_prepare, [
           env_script
         ]),
 
-        CommandSet.new(:runtime_prepare, [
-          "rvm install #{runtime_dim.version}",
-          "rvm use #{runtime_dim.version}",
+        CommandSet.new(:runtime, [
+          "cd $HOME/code",
+          "rvm use #{runtime_dim.version} || ( rvm install #{runtime_dim.version} && rvm use #{runtime_dim.version})",
           "bundle install --without development --jobs=3 --retry=3" , # --deployment
           # TODO get from yaml
         ]),
+
+
         CommandSet.new(:script, [
           "bundle exec rspec spec"
           # TODO get from yaml

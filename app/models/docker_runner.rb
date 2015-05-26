@@ -22,14 +22,17 @@ class DockerRunner
     @container  = Docker::Container.create(docker_creation_params)
   end
 
-  def docker_image
-    @build_spec.docker
+  def docker_image_tag
+    @build_spec.docker_dim.image_tag
   end
 
   def docker_creation_params
+    puts '------------------------'
+      puts @build_spec.build_script
+    puts '------------------------'
     {
       'Cmd' => ['bash', '-lc', @build_spec.build_script ],
-      'Image'      =>         docker_image ,
+      'Image'      =>         docker_image_tag ,
       'WorkingDir' =>         @build_spec.working_directory,
       'Name'       =>         @name,
       #'User'       =>         'yarvis'

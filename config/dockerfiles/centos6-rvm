@@ -26,14 +26,17 @@ RUN yum install -y epel-release \
   mysql-devel \
   nodejs
 
+
 # install necessary utilities
 RUN groupadd --gid 1000 yarvis
-RUN useradd -ms /bin/bash --uid=1000 --gid=1000 yarvis
+RUN useradd -ms /bin/bash -d /home/yarvis --uid=1000 --gid=1000 yarvis
+RUN yum install -y  sudo
 RUN echo '%yarvis ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers 
+RUN echo 'Defaults:%yarvis !requiretty' >> /etc/sudoers
+
 
 # install rvm
 RUN su yarvis -c 'curl -sSL https://rvm.io/mpapis.asc | gpg2 --import'
 RUN su yarvis -c 'curl -L get.rvm.io | bash -s stable --ruby'
 
-RUN yum install -y cmake
 USER yarvis

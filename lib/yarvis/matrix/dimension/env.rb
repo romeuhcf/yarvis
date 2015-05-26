@@ -11,7 +11,7 @@ module Yarvis
         end
 
         def to_script
-          @env.join("\n")
+          @env.map{|e| "export #{e}"}.join('; ')
         end
       end
     end

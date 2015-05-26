@@ -52,7 +52,7 @@ module Yarvis
     def dimensions_to_hash(dims)
       hash = {}
       dims.each do |dim|
-        key = dim.class.name.split('::').last.underscore.to_sym
+        key = dim.class.name.split('::').last.downcase.to_sym
         hash[key] = dim
       end
       hash

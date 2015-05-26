@@ -18,7 +18,7 @@ module Yarvis
       puts "Matrix specs:"
 
       matrix.specs.each_with_index do |spec, index|
-        puts "\t[%02d] - %s" % [index + 1, spec]
+        puts "\t[%02d] - %s" % [index + 1, spec.slug]
       end
     end
   end

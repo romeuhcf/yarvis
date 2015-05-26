@@ -2,22 +2,22 @@ module Yarvis
   class Matrix
     module Dimension
       class Docker
-        attr_reader :docker, :docker_options
+        attr_reader :image_tag, :commands
         def initialize(docker_options)
           interpret_docker_options(docker_options)
         end
 
         def slug
-          "docker:#{@docker}"
+          "docker:#{@image_tag}"
         end
 
         def interpret_docker_options(options)
           case options
           when String
-            @docker = options
+            @image_tag = options
           when Hash
-            @docker = options.keys.first
-            @docker_options = options.values
+            @image_tag = options.keys.first
+            @commands = options.values
           end
         end
       end
