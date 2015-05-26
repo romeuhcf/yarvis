@@ -37,7 +37,7 @@ module Yarvis
     end
 
     def runtime_dimensionables
-      @config.runtimes.map{|d| Dimension::Runtime.new(@config.language, d) }
+      @config.runtimes.map{|d| Dimension::Runtime.new(@config.runtime, d) }
     end
 
     def specs

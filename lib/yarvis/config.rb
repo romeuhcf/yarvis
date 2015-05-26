@@ -16,19 +16,21 @@ module Yarvis
     end
 
     def runtimes
-      @config[language]
+      @config.fetch(runtime)
     end
 
     def dockers
-      @config['docker']
+      @config.fetch('docker')
     end
 
     def envs
-      @config['env']
+      @config.fetch('env')
     end
 
-    def language
-      @config['language']
+    def runtime
+      @config.fetch('runtime')
+    rescue KeyError => e
+      raise KeyError, e.message + " in #{@config.keys}", e.backtrace
     end
   end
 end

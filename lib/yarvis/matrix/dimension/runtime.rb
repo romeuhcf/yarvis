@@ -2,14 +2,14 @@ module Yarvis
   class Matrix
     module Dimension
       class Runtime
-        attr_reader :language, :runtime
-        def initialize(language, runtime)
-          @language = language
+        attr_reader :runtime, :version
+        def initialize(runtime, version)
           @runtime = runtime
+          @version = version
         end
 
         def slug
-          "runtime:#{@language}@#{@runtime}"
+          "runtime:#{@runtime}:#{@version}"
         end
       end
     end
