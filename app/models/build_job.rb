@@ -23,6 +23,6 @@ class BuildJob < ActiveRecord::Base
   end
 
   def provision_path
-    @_provision_path ||= [changeset.provision_path, slug].join('@')
+    @_provision_path ||= [changeset.provision_path, [self.class.name, self.id].join('@') ].join('-')
   end
 end

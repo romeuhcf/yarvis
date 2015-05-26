@@ -11,7 +11,6 @@ class BuildJobWorker
     build_job.save!
 
     runner.start
-
     DockerRunnerMonitorWorker.perform_in(5, build_job_id)
     # TODO schedule repo clean of build_job_path
   end

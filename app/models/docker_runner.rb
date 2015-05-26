@@ -10,7 +10,7 @@ class DockerRunner
     obj.instance_eval do
       @container = container
       @root_path = container.json['Config']['WorkingDir']
-      @name = container.json['Config']['Name']
+      @name      = container.json['Config']['Name']
     end
     obj
   end
@@ -19,17 +19,20 @@ class DockerRunner
     @root_path  = root_path
     @build_spec = build_spec
     @name       = name
-
-    require 'pp'; pp(docker_creation_params)
     @container  = Docker::Container.create(docker_creation_params)
+  end
+
+  def docker_image
+    @build_spec.docker
   end
 
   def docker_creation_params
     {
-      'Cmd' => ['bash', '-c', @build_spec.build_script ],
-      'Image' =>              @build_spec.docker ,
+      'Cmd' => ['bash', '-lc', @build_spec.build_script ],
+      'Image'      =>         docker_image ,
       'WorkingDir' =>         @build_spec.working_directory,
-      'Name' =>               @name
+      'Name'       =>         @name,
+      #'User'       =>         'yarvis'
     }
   end
 
@@ -38,10 +41,11 @@ class DockerRunner
   end
 
   def start
-    @container.start( "Binds" =>  [ "#{@root_path}:#{@build_spec.working_directory}:rw" ]) unless running?
+    start_params = { "Binds" =>  [ "#{@root_path}:#{@build_spec.working_directory}:rw" ] }
+    @container.start(start_params) unless running?
   end
 
-  def logs(options = {stdout: true})
+  def logs(options = {stdout: true, stderr: true})
     output = []
     @container.streaming_logs(options) {|a, b| output << [a,b] }
     output

@@ -1,4 +1,12 @@
 module Yarvis
+  class CommandSet
+    attr_reader :label, :commands
+    def initialize(label, commands)
+      @commands = commands
+      @label = label
+    end
+  end
+
   class BuildSpec
     def initialize(config_hash, dimensions_hash)
       @config = config_hash
@@ -14,7 +22,11 @@ module Yarvis
     end
 
     def runtime
-      @dimensions_hash[:runtime].runtime
+      runtime_dim.runtime
+    end
+
+    def runtime_dim
+      @dimensions_hash[:runtime]
     end
 
     def env_script
@@ -22,32 +34,53 @@ module Yarvis
     end
 
     def working_directory
-      '/code'
+      '/code' # TODO.. get from settings as default or from yaml
     end
 
     def build_script
       script_lines = []
       build_steps.each do |step|
-        script_lines << step_start_line(step)
-        script_lines << step
-        script_lines << step_finish_line(step)
+        script_lines << step_start_line(step.label)
+        script_lines << step.commands
+        script_lines << step_finish_line(step.label)
       end
-      script_lines.join(" && ")
+      script_lines.flatten.join(" && ")
     end
 
     def build_steps
       [
-        "bundle install --without development --jobs=3 --retry=3" , # --deployment
-        "bundle exec rspec spec",
-      ] # TODO get from yaml
+        CommandSet.new(:code_prepare, [
+          "cp -rf /code $HOME/code",
+          "cd $HOME/code",
+        ]),
+        CommandSet.new(:runtime_prepare, [
+          "export BUNDLE_PATH=$HOME/code/.bundle",
+          "export BUNDLE_DISABLE_SHARED_GEMS=1",
+        ]),
+
+        CommandSet.new(:env_prepare, [
+          env_script
+        ]),
+
+        CommandSet.new(:runtime_prepare, [
+          "rvm install #{runtime_dim.version}",
+          "rvm use #{runtime_dim.version}",
+          "bundle install --without development --jobs=3 --retry=3" , # --deployment
+          # TODO get from yaml
+        ]),
+        CommandSet.new(:script, [
+          "bundle exec rspec spec"
+          # TODO get from yaml
+        ])
+      ]
     end
 
-    def step_start_line(step)
-      "echo '@@@ START: #{step} @@@'"
+    def step_start_line(step_label)
+      "echo '@@@ START: #{step_label} @@@'"
     end
 
-    def step_finish_line(step)
-      "echo '@@@ FINISH: #{step} @@@'"
+    def step_finish_line(step_label)
+      "echo '@@@ FINISH: #{step_label} @@@'"
     end
   end
 end

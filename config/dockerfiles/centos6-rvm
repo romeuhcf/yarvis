@@ -3,18 +3,37 @@ MAINTAINER Romeu Fonseca <romeu.hcf@gmail.com>
 
 # enable centos plus repo and install epel repo
 RUN sed -i '0,/enabled=.*/{s/enabled=.*/enabled=1/}' /etc/yum.repos.d/CentOS-Base.repo
-RUN yum install -y epel-release
-RUN yum update -y
+RUN yum install -y epel-release \
+  libyaml-devel \
+  glibc-headers \
+  autoconf \
+  gcc-c++ \
+  glibc-devel \
+  patch \
+  readline-devel \
+  zlib-devel \
+  libffi-devel \
+  openssl-devel \
+  bzip2 \
+  automake \
+  libtool \
+  bison \
+  sqlite-devel \
+  tar \
+  which \
+  libxml2-devel \
+  libxslt1-devel \
+  mysql-devel \
+  nodejs
 
 # install necessary utilities
-RUN yum install -y which tar
+RUN groupadd --gid 1000 yarvis
+RUN useradd -ms /bin/bash --uid=1000 --gid=1000 yarvis
+RUN echo '%yarvis ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers 
 
 # install rvm
-RUN curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
-RUN curl -L get.rvm.io | bash -s stable
-RUN source /etc/profile.d/rvm.sh
-RUN /bin/bash -l -c "rvm requirements"
-RUN /bin/bash -l -c "rvm install ruby"
-RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
-RUN useradd -ms /bin/bash yarvis
+RUN su yarvis -c 'curl -sSL https://rvm.io/mpapis.asc | gpg2 --import'
+RUN su yarvis -c 'curl -L get.rvm.io | bash -s stable --ruby'
+
+RUN yum install -y cmake
 USER yarvis
