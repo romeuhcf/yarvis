@@ -6,9 +6,9 @@ rvm:
 
 docker:
   - centos6-rvm:
-    - yum install -y openssh-devel
+    - sudo yum install -y openssh-devel cmake
   - ubuntu-rvm:
-    - apt-get install -y libssh-development
+    - sudo apt-get install -y libssh-development cmake 
 
 env:
   - DB=postgresql
