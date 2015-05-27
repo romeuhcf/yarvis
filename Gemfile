@@ -44,6 +44,7 @@ gem 'newrelic_rpm'
 gem 'easy_config'
 gem 'thin'
 gem 'rugged'
+
 gem 'rsync'
 gem 'docker-api', :require => 'docker'
 gem 'thor'
