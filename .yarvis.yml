@@ -23,7 +23,7 @@ services: # nao suportado ainda
 
 script:
   - prepare: 
-    - bundle install --path /bundle --jobs=3 --without development --retries=3
+    - bundle install --path /bundle --jobs=3 --without development
     - RAILS_ENV=test rake db:create db:migrate 
     - redis-cli flushall
   - rspec: rake -t  # example of labeled command
