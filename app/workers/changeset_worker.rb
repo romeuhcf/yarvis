@@ -8,7 +8,7 @@ class ChangesetWorker
 
     matrix = Yarvis::Config.from_yaml(File.join(revision_path, ".yarvis.yml")).matrix
 
-    matrix_size_limit = Settings.get('matrix.sizelimit', default: 1)
+    matrix_size_limit = Settings.get('matrix.sizelimit', default: 4)
     specs = matrix.specs[0,matrix_size_limit]
 
     specs.each do |build_spec|

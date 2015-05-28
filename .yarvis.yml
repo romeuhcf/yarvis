@@ -16,14 +16,14 @@ env:
   - CACHE=redis
   - CACHE=memcached
 
-services: # nao suportado ainda
+services: # TODO currently not supported
   - mongodb
   - memcached
   - redis-server
 
 script:
   - prepare: 
-    - bundle install --path /bundle --jobs=3 --without development
+  - bundle install --retry=3 --jobs=3 --without development
     - RAILS_ENV=test rake db:create db:migrate 
     - redis-cli flushall
   - rspec: rake -t  # example of labeled command
