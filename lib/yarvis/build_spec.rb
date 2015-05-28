@@ -9,9 +9,9 @@ module Yarvis
   end
 
   class BuildSpec
-    def initialize(config_hash, dimensions_hash)
-      @config = config_hash
-      @dimensions_hash = dimensions_hash
+    def initialize(config, dimensions_hash)
+      @config = config
+      @dimensions_hash = dimensions_hash || default_dimensions_hash
     end
 
     def slug
@@ -43,14 +43,14 @@ module Yarvis
     end
 
     def build_script
-
       script_lines = ['set -e']
       build_steps.each do |step|
         script_lines << step_start_line(step.label)
 
         step.commands.flatten.compact.map do |cmd|
-          script_lines << ["echo " + Shellwords.escape(cmd), cmd]
+          script_lines << ["echo \#" + Shellwords.escape(cmd), cmd]
         end
+
         script_lines << step_finish_line(step.label)
       end
       script_lines.flatten.compact.join("\n")
@@ -62,7 +62,7 @@ module Yarvis
           docker_dim.commands
         ]),
         CommandSet.new(:code_prepare, [
-          "cp -rfv #{working_directory} $HOME/code",
+          "cp -rf #{working_directory} $HOME/code",
           "cd $HOME/code",
           "rm -rf $HOME/code/.bundle"
         ]),
@@ -81,21 +81,50 @@ module Yarvis
           "bundle install --without development --jobs=3 --retry=3" , # --deployment
           # TODO get from yaml
         ]),
+      ] + assemble_script_command_sets
+    end
 
+    def assemble_script_command_sets
+      @config.script.map do |item|
+        script_item_to_command_set('script', item)
+      end
+    end
 
-        CommandSet.new(:script, [
-          "bundle exec rspec spec"
-          # TODO get from yaml
-        ])
-      ]
+    def script_item_to_command_set(label_prefix, item)
+      CommandSet.new(
+        [label_prefix, script_item_to_label(item)].join('_').to_sym,
+        script_item_to_command_list(item)
+      )
+    end
+
+    def script_item_to_label(item)
+      if item.is_a? Hash
+        item.keys.first
+      else
+        item.parameterize
+      end
+    end
+
+    def script_item_to_command_list(item)
+      data = if item.is_a? Hash
+        item.values
+      else
+        [item]
+      end
+
+      data.flatten.compact
+    end
+
+    def default_dimensions_hash
+      # TODO from detected runtime
     end
 
     def step_start_line(step_label)
-      "echo '@@@ START: #{step_label} @@@'"
+      "echo \"@@@ START: #{step_label}@$(date +%s) @@@\""
     end
 
     def step_finish_line(step_label)
-      "echo '@@@ FINISH: #{step_label} @@@'"
+      "echo \"@@@ FINISH: #{step_label}@$(date +%s) @@@\""
     end
   end
 end

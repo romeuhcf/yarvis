@@ -23,12 +23,12 @@ services: # nao suportado ainda
 
 script:
   - prepare: 
-    - bundle install --path /bundle --jobs=3 --without-development --retries=3
+    - bundle install --path /bundle --jobs=3 --without development --retries=3
     - RAILS_ENV=test rake db:create db:migrate 
     - redis-cli flushall
   - rspec: rake -t  # example of labeled command
   - rake cucumber # example of direct command
-  - security: gem install brakeman; breakeman
+  - security: gem install brakeman; brakeman
 
 after_success: # will run on a machine similar to the first build job without data generated from it
   - koji_build: rake koji build

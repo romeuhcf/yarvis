@@ -25,4 +25,18 @@ class BuildJob < ActiveRecord::Base
   def provision_path
     @_provision_path ||= [changeset.provision_path, [self.class.name, self.id].join('@') ].join('-')
   end
+
+  rails_admin do
+    configure :log do
+      pretty_value do
+        me = bindings[:object]
+        inner = me.log.map do |line|
+            kind, msg = *line
+            ['<li class="log-line log-', kind, '">', msg ,'</li>'].join
+        end.join("\n")
+        ['<ul class="log">', inner, '</ul>'].join("\n").html_safe
+      end
+    end
+  end
+
 end
