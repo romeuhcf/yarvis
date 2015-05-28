@@ -1,2 +1,14 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+
+table{
+  @extend .table;
+  @extend .table-condensed;
+  @extend .table-bordered;
+  @extend .table-striped;
+}
+
+body{
+  padding: 20px;
+}

@@ -1,0 +1,20 @@
+<h1>Listing changesets</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @changesets.each do |changeset| %>
+      <tr>
+        <td><%= link_to 'Show', changeset %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

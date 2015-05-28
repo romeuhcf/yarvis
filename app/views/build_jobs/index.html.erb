@@ -1,0 +1,22 @@
+<h1>Listing build_jobs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Slug</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @build_jobs.each do |build_job| %>
+      <tr>
+        <td><%= build_job.slug %></td>
+        <td><%= link_to 'Show', build_job %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

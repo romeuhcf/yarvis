@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-describe OutputParser do
+describe 'OutputParser' do
 
 end
