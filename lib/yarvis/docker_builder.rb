@@ -6,5 +6,4 @@ module Yarvis
       system cmd
     end
   end
-
 end
