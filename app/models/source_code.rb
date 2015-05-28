@@ -9,7 +9,7 @@ class SourceCode
   end
 
   def self.clone_at(url, path, credentials)
-    logger.info "Cloning repo: #{url} at #{path}"
+    Rails.logger.info "Cloning repo: #{url} at #{path}"
     Rugged::Repository.clone_at url, path , credentials
     self.new(path)
   end

@@ -15,6 +15,7 @@ class ChangesetWorker
       build_job = BuildJob.from_spec!(build_spec, changeset)
       BuildJobWorker.perform_async(build_job.id)
     end
+
   end
   include NonOverlappingWorker
 end
