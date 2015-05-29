@@ -6,10 +6,10 @@
 
 
 ### TODO ###
-* YAML configuration
+* YAML configuration for script steps
 * Cacheable directories
-* Workflow path when all build jobs passed
-* Job path stick into the docker server
+* Monitor all build jobs to trigger after success/faulure
+* Job path stick into the docker server - schedule each derived sidekiq worker on to the same worker server queue
 * Adding to SSH Known Hosts # http://docs.travis-ci.com/user/ssh-known-hosts/
 * Branch build
 * Branch blacklist/whitelist

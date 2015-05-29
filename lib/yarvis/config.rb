@@ -32,5 +32,9 @@ module Yarvis
     rescue KeyError => e
       raise KeyError, e.message + " in #{@config.keys}", e.backtrace
     end
+
+    def script
+      @config['script']
+    end
   end
 end

@@ -1,0 +1,23 @@
+<h1>Listing Repositories</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>URL</th>
+      <th>Last Changeset</th>
+      <th>Changesets</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @repositories.each do |repository| %>
+      <tr>
+        <td><%= repository.url%></td>
+        <td><%= repository.last_handled_revision%></td>
+        <td><%= repository.changesets.count%></td>
+        <td><%= link_to 'Show', repository %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

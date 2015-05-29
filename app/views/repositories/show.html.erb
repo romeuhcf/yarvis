@@ -1,0 +1,11 @@
+<p id="notice"><%= notice %></p>
+<h1>Repository: <%=@repository.url%></h1>
+
+
+<hr />
+
+<ul>
+  <%= render @repository.changesets.order('created_at desc') %>
+</ul>
+
+<%= link_to 'Back', repositories_path %>

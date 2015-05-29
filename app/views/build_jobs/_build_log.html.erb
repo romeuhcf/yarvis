@@ -1,0 +1,16 @@
+<% log_cruncher = BuildLogCruncher.new(build_job) %>
+<ol class='build-log'>
+  <% log_cruncher.each_crunch do |crunch| %>
+    <li class="crunch crunch-<%= crunch.success? ? 'success' : 'fail' %>">
+    <h1><%= crunch.label %>
+    <span class="open-log glyphicon glyphicon-list-alt" data-title="Log: <%= crunch.label%>" data-url="<%= step_log_build_job_path(build_job, crunch: crunch.label) %>" />
+  </h1>
+    <p>Success: <%= crunch.success? ? 'sim' : 'nao'%> </p>
+    <p>Duration: <%= crunch.duration%></p>
+    <p>
+    </p>
+
+    </li>
+  <% end %>
+</ol>
+

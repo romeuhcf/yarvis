@@ -1,0 +1,46 @@
+ol.build-log {
+  display: block;
+  white-space: nowrap;
+
+  p{
+    margin: 0;
+  }
+
+  li.crunch { 
+    display: inline-block;
+    list-style-type: none;
+    margin: 3px;
+    padding: 10px;
+  }
+
+  .crunch-success {
+    background-color: #dfd;
+  }
+
+  .crunch-fail {
+    background-color: #fdd;
+  }
+
+  .log-hidden{
+    display: none;
+  }
+
+  .open-log{
+    cursor: pointer;
+    float: right;
+    margin-left: 8px;
+    font-size: 0.8em;
+  }
+}
+
+
+.log {
+  background-color: #222;
+  color: #0f0;
+  font-weight: bolder;
+  .stderr {
+    color: #f00;
+  }
+}
+
+
