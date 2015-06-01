@@ -1,7 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
-ENV['RAILS_ADMIN_THEME'] = 'flatly_theme'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
