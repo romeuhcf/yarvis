@@ -54,7 +54,7 @@ end
 namespace :app do
   task :dependencies do
     on roles(:app, :web), in: :groups, limit: 3, wait: 10 do
-      execute :sudo, "yum install -y mysql-devel libxml2-devel libxslt-devel nodejs libssh2 openssl openssl-devel cmake"
+      execute :sudo, "yum install -y mysql-server mysql-devel libxml2-devel libxslt-devel nodejs libssh2 openssl openssl-devel cmake"
     end
   end
 end

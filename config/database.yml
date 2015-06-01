@@ -44,6 +44,7 @@ staging:
   <<: *mysql
   database: yarvis_staging
   username: root
+  socket:  /var/lib/mysql/mysql.sock
 
 production:
   <<: *mysql
