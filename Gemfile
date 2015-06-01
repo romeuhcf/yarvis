@@ -59,7 +59,6 @@ group :development, :test do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-sidekiq'
-  gem 'capistrano-passenger'
   gem 'capistrano-thin'
 end
 
