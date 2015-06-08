@@ -1,30 +1,35 @@
 .build_job {
-   border: 2px dashed white;
-   margin: 2px;
-   padding: 2px;
+  list-style-type: none;
+  margin: 2px;
+  padding-top:  3px;
+  padding-left: 3px;
+  padding-bottom: 0px;
   &.build_job-error {
-    background-color: #fdd;
+    background-color: #ffeeee;
   }
   &.build_job-success {
-    background-color: #dfd;
+    background-color: #eeffee;
   }
   &.build_job-running {
-    background-color: #ddf;
+    background-color: #eeeeff;
   }
 }
 
+ul{
+  padding-left: 0px;
+}
 .changeset {
-   border: 2px dashed white;
-   margin: 2px;
-   padding: 2px;
+  list-style-type: none;
+  margin: 4px;
+  padding: 2px;
   &.changeset-error {
-    background-color: #fdd;
+    background-color: #ffcccc;
   }
   &.changeset-success {
-    background-color: #dfd;
+    background-color: #ccffcc;
   }
   &.changeset-running {
-    background-color: #ddf;
+    background-color: #ccccff;
   }
 }
 
@@ -34,6 +39,7 @@
 ol.build-log {
   display: block;
   white-space: nowrap;
+  padding-left: 3px;
 
   p{
     margin: 0;
