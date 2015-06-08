@@ -10,7 +10,15 @@ class BuildJob < ActiveRecord::Base
   end
 
   def running?
-    finished_at.blank?
+    status == 'running'
+  end
+
+  def success?
+    status == 'success'
+  end
+
+  def failed?
+    status == 'error'
   end
 
   def run_time
