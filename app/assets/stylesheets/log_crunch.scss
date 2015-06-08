@@ -1,3 +1,36 @@
+.build_job {
+   border: 2px dashed white;
+   margin: 2px;
+   padding: 2px;
+  &.build_job-error {
+    background-color: #fdd;
+  }
+  &.build_job-success {
+    background-color: #dfd;
+  }
+  &.build_job-running {
+    background-color: #ddf;
+  }
+}
+
+.changeset {
+   border: 2px dashed white;
+   margin: 2px;
+   padding: 2px;
+  &.changeset-error {
+    background-color: #fdd;
+  }
+  &.changeset-success {
+    background-color: #dfd;
+  }
+  &.changeset-running {
+    background-color: #ddf;
+  }
+}
+
+
+
+
 ol.build-log {
   display: block;
   white-space: nowrap;

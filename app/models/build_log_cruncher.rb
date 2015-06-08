@@ -26,6 +26,8 @@ class BuildLogCruncher
       finish - start
     end
 
+
+    #TODO... I need a running status
     def success?
       return true unless started_at
 
