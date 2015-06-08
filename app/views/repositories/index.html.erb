@@ -12,7 +12,7 @@
 
   <tbody>
   <% @repositories.each do |repository| %>
-      <tr>
+      <tr class="repository-<%=repository.changesets.order('id desc').limit(1).first.try(:status) %>">
         <td><%= repository.url%></td>
         <td><%= repository.last_handled_revision%></td>
         <td><%= repository.changesets.count%></td>
