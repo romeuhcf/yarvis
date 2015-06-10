@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20150608003614) do
     t.text     "build_spec"
     t.string   "container_id"
     t.string   "slug"
-    t.string   "status"
+    t.string   "status",       default: "running"
     t.string   "error"
   end
 
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20150608003614) do
     t.string   "commit_message"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "status"
+    t.string   "status",         default: "running"
     t.string   "error"
   end
 

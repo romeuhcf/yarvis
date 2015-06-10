@@ -28,7 +28,7 @@ class DockerRunner
 
   def docker_creation_params
     puts '------------------------'
-      puts @build_spec.build_script
+    puts @build_spec.build_script
     puts '------------------------'
     {
       'Cmd' => ['bash', '-lc', @build_spec.build_script ],

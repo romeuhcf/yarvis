@@ -1,13 +1,7 @@
-require 'shellwords'
-module Yarvis
-  class CommandSet
-    attr_reader :label, :commands
-    def initialize(label, commands)
-      @commands = commands
-      @label = label
-    end
-  end
+require 'yarvis/command_set'
+require 'yarvis/script_composer'
 
+module Yarvis
   class BuildSpec
     def initialize(config, dimensions_hash)
       @config = config
@@ -43,45 +37,33 @@ module Yarvis
     end
 
     def build_script
-      script_lines = ['set -e']
-      build_steps.each do |step|
-        script_lines << step_start_line(step.label)
+      ScriptComposer.new(
+        [
+          CommandSet.new(:docker_prepare,[
+            docker_dim.commands
+          ]),
+          CommandSet.new(:code_prepare, [
+            "cp -rf #{working_directory} $HOME/code",
+            "cd $HOME/code",
+            "rm -rf $HOME/code/.bundle"
+          ]),
+          CommandSet.new(:runtime_prepare, [
+            #          "export BUNDLE_PATH=$HOME/code/.bundle",
+            #          "export BUNDLE_DISABLE_SHARED_GEMS=1",
+          ]),
 
-        step.commands.flatten.compact.map do |cmd|
-          script_lines << ["echo \#" + Shellwords.escape(cmd), cmd]
-        end
+          CommandSet.new(:env_prepare, [
+            env_script
+          ]),
 
-        script_lines << step_finish_line(step.label)
-      end
-      script_lines.flatten.compact.join("\n")
-    end
-
-    def build_steps
-      [
-        CommandSet.new(:docker_prepare,[
-          docker_dim.commands
-        ]),
-        CommandSet.new(:code_prepare, [
-          "cp -rf #{working_directory} $HOME/code",
-          "cd $HOME/code",
-          "rm -rf $HOME/code/.bundle"
-        ]),
-        CommandSet.new(:runtime_prepare, [
-          #          "export BUNDLE_PATH=$HOME/code/.bundle",
-          #          "export BUNDLE_DISABLE_SHARED_GEMS=1",
-        ]),
-
-        CommandSet.new(:env_prepare, [
-          env_script
-        ]),
-
-        CommandSet.new(:runtime, [
-          "cd $HOME/code",
-          "rvm use #{runtime_dim.version} || ( rvm install #{runtime_dim.version} && rvm use #{runtime_dim.version})",
-          "bundle install --without development --jobs=3 --retry=3" , # --deployment
-          # TODO get from yaml
-        ]),
-      ] + assemble_script_command_sets
+          CommandSet.new(:runtime, [
+            "cd $HOME/code",
+            "rvm use #{runtime_dim.version} || ( rvm install #{runtime_dim.version} && rvm use #{runtime_dim.version})",
+            "bundle install --without development --jobs=3 --retry=3" , # --deployment
+            # TODO get from yaml
+          ]),
+        ] + assemble_script_command_sets
+      ).to_script
     end
 
     def assemble_script_command_sets
@@ -107,10 +89,10 @@ module Yarvis
 
     def script_item_to_command_list(item)
       data = if item.is_a? Hash
-        item.values
-      else
-        [item]
-      end
+               item.values
+             else
+               [item]
+             end
 
       data.flatten.compact
     end
@@ -119,12 +101,5 @@ module Yarvis
       # TODO from detected runtime
     end
 
-    def step_start_line(step_label)
-      "echo \"@@@ START: #{step_label}@$(date +%s) @@@\""
-    end
-
-    def step_finish_line(step_label)
-      "echo \"@@@ FINISH: #{step_label}@$(date +%s) @@@\""
-    end
   end
 end

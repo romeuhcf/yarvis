@@ -11,15 +11,14 @@ docker:
     - sudo apt-get install -y libssh-development cmake 
 
 env:
-  - DB=postgresql
   - DB=mysql
   - CACHE=redis
   - CACHE=memcached
 
 services: # TODO currently not supported
   - mongodb
-  - memcached
-  - redis-server
+  - memcache
+  - redis
 
 script:
   - prepare: 
