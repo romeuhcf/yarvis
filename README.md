@@ -28,6 +28,7 @@ High prio
 * Adding to SSH Known Hosts # http://docs.travis-ci.com/user/ssh-known-hosts/
 * Cacheable directories
 * External hooks
+* RVM not switching rubies correctly
 
 Medium prio
 * Remote docker server access and management

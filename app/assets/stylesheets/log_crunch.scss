@@ -56,8 +56,20 @@ ol.build-log {
     background-color: #dfd;
   }
 
-  .crunch-fail {
-    background-color: #fdd;
+  .crunch-failed {
+    background-color: #fcc;
+  }
+
+  .crunch-pending {
+    background-color: #ccc;
+  }
+
+  .crunch-running {
+    background-color: #ccf;
+  }
+
+  .crunch-skipped {
+    background-color: #eee;
   }
 
   .log-hidden{
