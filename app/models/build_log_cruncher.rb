@@ -17,8 +17,12 @@ class LogCrunch
     @status = started_at ? STATUS_RUNNING : STATUS_PENDING
     @build_job = build_job
     @label = label
-    @started_at = started_at
     @logs = []
+  end
+
+  def started_at=(time)
+    @started_at = time
+    @status = STATUS_RUNNING
   end
 
   def duration
@@ -67,9 +71,14 @@ class BuildLogCruncher
   end
 
   def parse_log!
-    @crunches = [
-      @current_crunch = LogCrunch.new(@build_job, 'world')
-    ]
+    @crunches = {
+     'world' => @current_crunch = LogCrunch.new(@build_job, 'world')
+    }
+
+    @build_job.build_spec.command_set_list.each do |cs|
+      @crunches[cs.label.to_s] = LogCrunch.new(@build_job, cs.label)
+    end
+
     (@build_job.log || []).each do |log_item|
       fd, message = *log_item
       message.strip!
@@ -84,17 +93,13 @@ class BuildLogCruncher
   end
 
   def on_start_message(stepname, timestamp)
-    @current_crunch = LogCrunch.new(@build_job, stepname, Time.at(timestamp.to_i))
-    @crunches << @current_crunch
+    @current_crunch = @crunches[stepname]
+    @crunches[stepname].started_at = Time.at(timestamp.to_i)
   end
 
   def on_finish_message(stepname, timestamp, status_code)
-    if @current_crunch.label != stepname
-      fail "Unexpected current crunch with name #{@current_crunch.label}. Expected #{stepname}"
-    end
-
-    @current_crunch.status_code = status_code
-    @current_crunch.finished_at = Time.at(timestamp.to_i)
+    @crunches[stepname].finished_at = Time.at(timestamp.to_i)
+    @crunches[stepname].status_code = status_code
   end
 
   def on_message(fd, message)
@@ -102,11 +107,11 @@ class BuildLogCruncher
   end
 
   def each_crunch
-    @crunches.each{|i| yield i}
+    @crunches.each{|k, crunch| yield crunch}
   end
 
   def crunch_by_label(label)
-    @crunches.find{|c| c.label.to_s == label}
+    @crunches[label]
   end
 
 end

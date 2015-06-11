@@ -37,7 +37,10 @@ module Yarvis
     end
 
     def build_script
-      ScriptComposer.new(
+      ScriptComposer.new(command_set_list).to_script
+    end
+
+    def command_set_list
         [
           CommandSet.new(:docker_prepare,[
             docker_dim.commands
@@ -63,7 +66,6 @@ module Yarvis
             # TODO get from yaml
           ]),
         ] + assemble_script_command_sets
-      ).to_script
     end
 
     def assemble_script_command_sets

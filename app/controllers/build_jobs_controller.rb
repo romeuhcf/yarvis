@@ -10,8 +10,7 @@ class BuildJobsController < ApplicationController
 
   def step_log
     @log_cruncher = BuildLogCruncher.new(@build_job)
-    p @log_cruncher.crunches.map{|a| a.label }
-    @crunch = @log_cruncher.crunch_by_label(params[:crunch])
+    @crunch = @log_cruncher.crunches[params[:crunch]]
     render layout: false
   end
 
