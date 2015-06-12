@@ -27,14 +27,12 @@ class DockerRunner
   end
 
   def docker_creation_params
-    puts '------------------------'
-    puts @build_spec.build_script
-    puts '------------------------'
     {
       'Cmd' => ['bash', '-lc', @build_spec.build_script ],
       'Image'      =>         docker_image_tag ,
       'WorkingDir' =>         @build_spec.working_directory,
       'Name'       =>         @name,
+      'Tty'        =>         true,
       #'User'       =>         'yarvis'
     }
   end
@@ -49,13 +47,7 @@ class DockerRunner
   end
 
   def logs(options = {stdout: true, stderr: true})
-    output = []
-    @container.streaming_logs(options) {|a, b| output << [a,b] }
-    output
-  end
-
-  def pp_logs(*args)
-    logs(*args).map{|a| a.join(': ')}.join("")
+    @container.logs(stdout: true, stderr: true).split("\n")
   end
 
   def terminate

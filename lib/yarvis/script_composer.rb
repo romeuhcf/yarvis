@@ -43,6 +43,7 @@ module Yarvis
     def build_step_pipeline_script
       step_labels = @command_sets.map{|s| Shellwords.escape(s.label)}.join(' ')
       [
+        'echo "@@@ FINISH:world MOMENT:$(date +%s) STATUS:success @@@"',
         "for STEP_NAME in #{step_labels}",
         'do',
         '  step_caller "$STEP_NAME"',

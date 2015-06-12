@@ -39,4 +39,5 @@ RUN echo 'Defaults:%yarvis !requiretty' >> /etc/sudoers
 RUN su yarvis -c 'curl -sSL https://rvm.io/mpapis.asc | gpg2 --import'
 RUN su yarvis -c 'curl -L get.rvm.io | bash -s stable --ruby'
 
+RUN yum install -y  mysql-server
 USER yarvis

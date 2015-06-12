@@ -42,8 +42,8 @@ class LogCrunch
     status == STATUS_SUCCESS
   end
 
-  def add_log(fd, message)
-    @logs << [fd, message]
+  def add_log(message)
+    @logs << [message]
   end
 
   def status_code=(status_code)
@@ -79,15 +79,14 @@ class BuildLogCruncher
       @crunches[cs.label.to_s] = LogCrunch.new(@build_job, cs.label)
     end
 
-    (@build_job.log || []).each do |log_item|
-      fd, message = *log_item
+    (@build_job.log || []).each do |message|
       message.strip!
       if m = START_CHUNK_REGEXP.match(message)
         on_start_message( m[:stepname], m[:timestamp])
       elsif m = FINISH_CHUNK_REGEXP.match(message)
         on_finish_message(m[:stepname], m[:timestamp], m[:status_code])
       else
-        on_message(fd, message)
+        on_message(message)
       end
     end
   end
@@ -102,8 +101,8 @@ class BuildLogCruncher
     @crunches[stepname].status_code = status_code
   end
 
-  def on_message(fd, message)
-    @current_crunch.add_log(fd, message)
+  def on_message(message)
+    @current_crunch.add_log(message)
   end
 
   def each_crunch

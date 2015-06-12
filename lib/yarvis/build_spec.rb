@@ -61,7 +61,7 @@ module Yarvis
 
           CommandSet.new(:runtime, [
             "cd $HOME/code",
-            "rvm use #{runtime_dim.version} || ( rvm install #{runtime_dim.version} && rvm use #{runtime_dim.version})",
+            "rvm use #{runtime_dim.version} --install --binary --fuzzy",
             "bundle install --without development --jobs=3 --retry=3" , # --deployment
             # TODO get from yaml
           ]),
