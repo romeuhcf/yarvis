@@ -43,7 +43,7 @@ module Yarvis
     def command_set_list
         [
           CommandSet.new(:docker_prepare,[
-            docker_dim.commands
+            docker_dim.commands + ['sudo service mysqld start || sudo service mysql start || sudo service mysql-server start']
           ]),
           CommandSet.new(:code_prepare, [
             "cp -rf #{working_directory} $HOME/code",
@@ -61,6 +61,7 @@ module Yarvis
 
           CommandSet.new(:runtime, [
             "cd $HOME/code",
+            '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"',
             "rvm use #{runtime_dim.version} --install --binary --fuzzy",
             "bundle install --without development --jobs=3 --retry=3" , # --deployment
             # TODO get from yaml
@@ -85,7 +86,7 @@ module Yarvis
       if item.is_a? Hash
         item.keys.first
       else
-        item.parameterize
+        item.parameterize.underscore
       end
     end
 

@@ -28,7 +28,7 @@ class LogCrunch
   def duration
     case status
     when STATUS_SUCCESS
-      self.finished_at - self.started_at
+      self.started_at && self.finished_at - self.started_at
     when STATUS_FAILED
       self.finished_at - self.started_at
     when STATUS_RUNNING
