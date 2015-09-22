@@ -4,6 +4,32 @@
 [![Build Status](https://travis-ci.org/romeuhcf/yarvis.svg?branch=master)](https://travis-ci.org/romeuhcf/yarvis)
 
 ## Yet Another ReVolutionary Integration System ##
+### Context diagram
+                             ,----(º º) ---.
+                             |             |
+                             |    User     |
+                             |             |
+                             `-------------'
+                                   |
+                                   |
+                                   V
+                            ,----------------.
+                            |                |
+                            |     YARVIS     |
+                            |                |
+                            `----------------'
+                                /        \
+                               /          \
+                              V            V
+                ,----------------.      ,----------------.
+                |                |      |                |
+                |     DOCKER     |      |      GIT       |
+                |                |      |                |
+                `----------------'      `----------------'
+
+
+### Installing ###
+If you got Unsupported URL error with any SSH git repository, make sure you installed rugged gem with all 
 
 
 ### Installing ###
